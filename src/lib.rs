@@ -1,4 +1,6 @@
-#![crate_name = "arg_parser"]
+// #![crate_type = "lib"]
+// #![crate_name = "arg_parser"]
+
 #[allow(unused_macros)]
 
 // Remove when done?
@@ -71,8 +73,8 @@ pub mod arg_parser {
             let mut a: ArgumentParser = ArgumentParser::new();
             a.add_arg("-a", "Does nothing, really.");
             match a.add_arg("-a", "Does nothing, really.") {
-                    false => (),
-                    true => panic!("Doesn't return correct value when inserting duplicate arguments.")
+                    false => panic!("Doesn't return correct value when inserting duplicate arguments."),
+                    true => (),
                 };
         }
     }
