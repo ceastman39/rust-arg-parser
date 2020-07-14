@@ -77,5 +77,12 @@ pub mod arg_parser {
                     true => (),
                 };
         }
+
+        #[test]
+        fn get_description() {
+            let mut a: ArgumentParser = ArgumentParser::new();
+            a.add_arg("-b", "Some description.");
+            println!("{}", a.get_desc());
+        }
     }
 }
