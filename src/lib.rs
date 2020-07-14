@@ -1,16 +1,27 @@
+#![crate_name = "arg_parser"]
 #[allow(unused_macros)]
+
+// Remove when done?
+#[allow(dead_code)]
+
+/*
+  ===================================
+  TODO:
+      * Write more docs lole
+  ===================================
+*/
+
 pub mod arg_parser {
 
     use std::collections::HashMap;
-    use std::result;
 
-    #[derive(Debug)]
-    pub enum ArgParseError {
-        ArgAlreadyExists,
-    }
-
-    struct Argument {
+    /// The values to be put into the HashMap inside of ArgumentParser
+    pub struct Argument {
+        /// The description of what the argument does.
+        /// This is used when printing the help modules, or if an
+        /// invalid argument is used.
         desc: String,
+        /// The actual argument values passed in.
         val: Vec<String>,
     }
 
@@ -29,14 +40,21 @@ pub mod arg_parser {
             ArgumentParser { args: HashMap::new() }
         }
 
-        pub fn add_arg(&mut self, flag: &str, desc: &str) -> Result<(),ArgParseError>{
-            match self.args.contains_key(flag) {
-                false => {
-                    self.args.insert(flag.to_string(), Argument::new(desc));
-                    Ok(())
-                },
-                true => Err(ArgParseError::ArgAlreadyExists),
+        /// This adds an arugment to the ArgumentParser.
+        ///  Returns: a bool indicating if a value was overritten when inserting
+        ///  into the ArgumentParser.
+        ///  (ie: returns `true` if the `flag` string already existed as a key
+        ///  in the ArgumentParser and was overwritten, `false` otherwise.)
+        pub fn add_arg(&mut self, flag: &str, desc: &str) -> bool {
+            match self.args.insert(flag.to_string(), Argument::new(desc)) {
+                None => false,
+                Some(_) => true,
             }
+        }
+
+        /// Resturns the formatted description of the program.
+        pub fn get_desc(&mut self) -> &str {
+            "Not implemented lole"
         }
     }
 
@@ -51,8 +69,11 @@ pub mod arg_parser {
         #[test]
         fn add_argument() {
             let mut a: ArgumentParser = ArgumentParser::new();
-            match a.add_arg("-a", "Does nothing, really.") {_ => (),};
-            match a.add_arg("-a", "Does nothing, really.") {_ => (),};
+            a.add_arg("-a", "Does nothing, really.");
+            match a.add_arg("-a", "Does nothing, really.") {
+                    false => (),
+                    true => panic!("Doesn't return correct value when inserting duplicate arguments.")
+                };
         }
     }
 }
