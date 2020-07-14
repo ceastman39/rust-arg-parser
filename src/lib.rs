@@ -43,10 +43,10 @@ pub mod arg_parser {
         }
 
         /// This adds an arugment to the ArgumentParser.
-        ///  Returns: a bool indicating if a value was overritten when inserting
-        ///  into the ArgumentParser.
-        ///  (ie: returns `true` if the `flag` string already existed as a key
-        ///  in the ArgumentParser and was overwritten, `false` otherwise.)
+        /// Returns: a bool indicating if a value was overritten when inserting
+        /// into the ArgumentParser.
+        /// (ie: returns `true` if the `flag` string already existed as a key
+        /// in the ArgumentParser and was overwritten, `false` otherwise.)
         pub fn add_arg(&mut self, flag: &str, desc: &str) -> bool {
             match self.args.insert(flag.to_string(), Argument::new(desc)) {
                 None => false,
