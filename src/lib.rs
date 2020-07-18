@@ -15,7 +15,26 @@
 
 pub mod arg_parser {
 
+    /// This is where the errors and warnings are defined for the
+    //  `arg_parser` library.
+    pub mod errors {
+        #[derive(Debug)]
+        pub enum Warning {
+            PlaceholderWarning,
+            FlagAlreadyExists,
+        }
+
+        #[derive(Debug)]
+        pub enum Error {
+            GenericError,
+            PlaceholderError,
+        }
+    }
+
     use std::collections::HashMap;
+    //use errors::*;
+
+
 
     /// The values to be put into the HashMap inside of ArgumentParser
     pub struct Argument {
@@ -43,14 +62,12 @@ pub mod arg_parser {
         }
 
         /// This adds an arugment to the ArgumentParser.
-        /// Returns: a bool indicating if a value was overritten when inserting
-        /// into the ArgumentParser.
-        /// (ie: returns `true` if the `flag` string already existed as a key
-        /// in the ArgumentParser and was overwritten, `false` otherwise.)
-        pub fn add_arg(&mut self, flag: &str, desc: &str) -> bool {
+        /// Returns: an Option, None if everything is successful, a warning
+        /// if something lame happens.
+        pub fn add_arg(&mut self, flag: &str, desc: &str) -> Option<errors::Warning> {
             match self.args.insert(flag.to_string(), Argument::new(desc)) {
-                None => false,
-                Some(_) => true,
+                None => None,
+                Some(_) => Some(errors::Warning::FlagAlreadyExists),
             }
         }
 
@@ -73,8 +90,8 @@ pub mod arg_parser {
             let mut a: ArgumentParser = ArgumentParser::new();
             a.add_arg("-a", "Does nothing, really.");
             match a.add_arg("-a", "Does nothing, really.") {
-                    false => panic!("Doesn't return correct value when inserting duplicate arguments."),
-                    true => (),
+                    Some(w) => println!("successfully got warning: {:?}", w),
+                    None => panic!("Got None, expected a warning: {:?}", errors::Warning::FlagAlreadyExists),
                 };
         }
 
