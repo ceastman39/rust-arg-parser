@@ -14,10 +14,8 @@
 */
 
 pub mod arg_parser {
-
-    /// This is where the errors and warnings are defined for the
-    //  `arg_parser` library.
-    pub mod errors {
+        use std::collections::HashMap;
+        /// This is where the errors and warnings are defined for the library.
         #[derive(Debug)]
         pub enum Warning {
             PlaceholderWarning,
@@ -29,10 +27,7 @@ pub mod arg_parser {
             GenericError,
             PlaceholderError,
         }
-    }
 
-    use std::collections::HashMap;
-    //use errors::*;
 
 
 
@@ -64,10 +59,10 @@ pub mod arg_parser {
         /// This adds an arugment to the ArgumentParser.
         /// Returns: an Option, None if everything is successful, a warning
         /// if something lame happens.
-        pub fn add_arg(&mut self, flag: &str, desc: &str) -> Option<errors::Warning> {
+        pub fn add_arg(&mut self, flag: &str, desc: &str) -> Option<Warning> {
             match self.args.insert(flag.to_string(), Argument::new(desc)) {
                 None => None,
-                Some(_) => Some(errors::Warning::FlagAlreadyExists),
+                Some(_) => Some(Warning::FlagAlreadyExists),
             }
         }
 
@@ -91,7 +86,7 @@ pub mod arg_parser {
             a.add_arg("-a", "Does nothing, really.");
             match a.add_arg("-a", "Does nothing, really.") {
                     Some(w) => println!("successfully got warning: {:?}", w),
-                    None => panic!("Got None, expected a warning: {:?}", errors::Warning::FlagAlreadyExists),
+                    None => panic!("Got None, expected a warning: {:?}", Warning::FlagAlreadyExists),
                 };
         }
 
